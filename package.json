@@ -1,0 +1,24 @@
+{
+  "name": "gp-ops",
+  "version": "1.0.0",
+  "description": "AI-powered DevOps Copilot that connects to remote agents, interprets natural language commands, and automates infrastructure tasks with real-time logs and dashboards.",
+  "scripts": {
+    "dev:backend": "pnpm --filter backend start:dev",
+    "dev:dashboard": "pnpm --filter dashboard dev",
+    "dev:agent": "pnpm --filter agent dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gpmindset/gp-ops.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gpmindset/gp-ops/issues"
+  },
+  "homepage": "https://github.com/gpmindset/gp-ops#readme"
+}

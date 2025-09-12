@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgentDto } from './dto/create-agent.dto';
-import { UpdateAgentDto } from './dto/update-agent.dto';
+import {InjectModel} from "@nestjs/mongoose";
+import {Agents, AgentsDocument} from "./schemas/agents.schema";
+import {Model} from "mongoose";
+import {RegisterAgentDto} from "./dto/agents.dto";
 
 @Injectable()
 export class AgentsService {
-  create(createAgentDto: CreateAgentDto) {
-    return 'This action adds a new agent';
+
+  constructor(@InjectModel(Agents.name)private readonly agentModel: Model<AgentsDocument>) {}
+
+  async registerAgent(agent: RegisterAgentDto) {
+    const findDuplicate = await this.agentModel.findOne({ agentId: agent.id });
+    if (findDuplicate) {
+      return agent;
+    }
+
+    const newAgent = new this.agentModel({
+                agentId: agent.id,
+                name: agent.name,
+                platform: agent.platform,
+                release: agent.release,
+                architecture: agent.architecture
+              });
+    return newAgent.save();
   }
 
-  findAll() {
-    return `This action returns all agents`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} agent`;
-  }
-
-  update(id: number, updateAgentDto: UpdateAgentDto) {
-    return `This action updates a #${id} agent`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} agent`;
-  }
 }

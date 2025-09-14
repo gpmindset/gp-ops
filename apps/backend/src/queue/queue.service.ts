@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {InjectQueue} from "@nestjs/bullmq";
 import { Queue } from "bullmq"
-import {JobDto} from "./dto/job.dto";
+import {JobDto} from "../jobs/dto/job.dto";
 
 @Injectable()
 export class QueueService {

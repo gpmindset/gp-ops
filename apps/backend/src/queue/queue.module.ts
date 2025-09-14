@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { QueueService } from './queue.service';
 import {BullModule} from "@nestjs/bullmq";
 import {QueueProcessor} from "./queue.processor";
+import {SharedModule} from "../shared/shared.module";
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import {QueueProcessor} from "./queue.processor";
             password: "ZIJCBFge1nk58B5J5yhOT9l8Qglmv0Bg"
         }
       }),
-      BullModule.registerQueue({ name: "gp-jobs" })
+      BullModule.registerQueue({ name: "gp-jobs" }),
+      SharedModule
   ],
   providers: [QueueService, QueueProcessor],
     exports: [QueueService]

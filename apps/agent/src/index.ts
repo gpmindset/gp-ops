@@ -8,12 +8,15 @@ import {Job, Runner} from "./types";
 import axios, {AxiosError} from "axios";
 import {spawn} from "node:child_process";
 
-const BACKEND_URL = "http://localhost:8001";
-const RUNNER_CONFIG_PATH = path.join(__dirname, '../config', 'runner.json');
+const BACKEND_URL = "http://localhost:3000";
+const RUNNER_CONFIG_PATH = path.join(__dirname, 'runner.json');
 let RUNNER_ID = ""
 
 const axiosInstance = axios.create({
-    url: BACKEND_URL,
+    baseURL: BACKEND_URL,
+    headers: {
+        "Content-Type": "application/json"
+    }
 })
 
 const getRunnerDetails = () => {
@@ -54,7 +57,8 @@ const getRunnerConfig = async () => {
 
 const streamLogs = async (jobId: string, type: string, data: string) => {
     try {
-        await axiosInstance.post(`/agents/logs/${RUNNER_ID}`, {
+        await axiosInstance.post(`/jobs/logs`, {
+            agentId: RUNNER_ID,
             jobId,
             type,
             data
@@ -68,7 +72,7 @@ const streamLogs = async (jobId: string, type: string, data: string) => {
 const executeCommand = async (job: Job) => {
     const { id, type, data } = job;
 
-    const child = spawn(data.commands, { shell: true });
+    const child = spawn(data.commands[0], { shell: true });
 
     let logBuffer = ""
     const BUFFER_SIZE_BYTES = 50 * 1024;
@@ -115,13 +119,19 @@ const executeCommand = async (job: Job) => {
 async function startPolling() {
 
     let runnerConfig = await getRunnerConfig();
+    const response = await axiosInstance.post(`/agents`, runnerConfig);
+
+    if (response.status === 200) {
+        logger.info("Registered or updated agent...")
+    }
+
     logger.info(`Agent Started with ID: ${runnerConfig.id}`);
     logger.info("Starting Polling...")
 
     while (true) {
         try {
 
-            const response = await axiosInstance.post(`/tasks/poll`, { runnerId: RUNNER_ID });
+            const response = await axiosInstance.post(`/jobs/poll`, { agentId: RUNNER_ID });
 
             if (response.status === 200) {
                 const job = response.data as Job;

@@ -1,4 +1,4 @@
-import {Controller, Post} from '@nestjs/common';
+import {Body, Controller, Post} from '@nestjs/common';
 import { AgentsService } from './agents.service';
 import {RegisterAgentDto} from "./dto/agents.dto";
 
@@ -7,7 +7,8 @@ export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
 
   @Post()
-  async registerAgent(agent: RegisterAgentDto) {
+  async registerAgent(@Body() agent: RegisterAgentDto) {
+    console.log(agent, "Agent");
     return await this.agentsService.registerAgent(agent);
   }
 }

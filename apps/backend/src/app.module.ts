@@ -5,7 +5,7 @@ import { DbModule } from './db/db.module';
 import { JobsModule } from './jobs/jobs.module';
 
 @Module({
-  imports: [AgentsModule, QueueModule, DbModule, JobsModule],
+  imports: [QueueModule, JobsModule, AgentsModule, DbModule],
 })
 
 export class AppModule {}

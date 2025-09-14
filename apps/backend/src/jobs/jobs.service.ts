@@ -15,7 +15,7 @@ export class JobsService {
         const newJob = new this.jobModel(job)
         await newJob.save();
 
-        await this.queueService.addJob(job.agentId, newJob)
+        await this.queueService.addJob(job.agentId, job)
     }
 
 }

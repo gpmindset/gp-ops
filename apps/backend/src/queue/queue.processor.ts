@@ -14,7 +14,7 @@ export class QueueProcessor extends WorkerHost {
 
         const res = this.pollingService.getAndClearPendingRequests(agentId);
         if (res) {
-            res.status(HttpStatus.OK).send({ jobId: job.id, data: job.data });
+            res.status(HttpStatus.OK).send({ id: job.id, data: job.data });
         } else {
             console.log(`Agent ${agentId} is not polling, job ${job.id} will picked up on next poll`);
         }

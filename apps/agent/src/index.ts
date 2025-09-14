@@ -72,7 +72,7 @@ const streamLogs = async (jobId: string, type: string, data: string) => {
 const executeCommand = async (job: Job) => {
     const { id, type, data } = job;
 
-    const child = spawn(data.commands[0], { shell: true });
+    const child = spawn(data.commands[1], { shell: true });
 
     let logBuffer = ""
     const BUFFER_SIZE_BYTES = 50 * 1024;
